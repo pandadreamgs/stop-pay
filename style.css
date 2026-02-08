@@ -20,11 +20,41 @@ body { font-family: -apple-system, sans-serif; background: var(--bg); color: var
 .card img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
 .card:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-/* Кнопка "+" */
-.fab-btn { position: fixed; bottom: 25px; right: 25px; background: var(--accent); color: white; padding: 12px 20px; border-radius: 30px; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4); z-index: 100; transition: 0.3s; }
-.fab-icon { font-size: 20px; font-weight: bold; }
-@media (max-width: 400px) { .fab-text { display: none; } .fab-btn { border-radius: 50%; padding: 15px; } }
+/* Компактна кнопка + */
+.fab-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: var(--accent);
+    color: white;
+    width: 50px;  /* Фіксована ширина */
+    height: 50px; /* Фіксована висота */
+    border-radius: 50%; /* Робимо коло */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+    z-index: 100;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
+.fab-icon {
+    font-size: 28px; /* Розмір плюсика */
+    font-weight: bold;
+    line-height: 0;
+}
+
+/* Приховуємо текст, щоб кнопка була просто кружечком */
+.fab-text {
+    display: none;
+}
+
+/* Ефект при наведенні */
+.fab-btn:hover {
+    transform: scale(1.1);
+    background: #ff5e6c;
+}
 /* --- NAV & HEADER --- */
 nav { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 10; }
 header { text-align: center; margin-bottom: 20px; width: 100%; max-width: 600px; }
