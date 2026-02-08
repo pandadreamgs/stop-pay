@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StopPay 🛑 - Cancel Subscriptions Fast</title>
-    <meta name="description" content="Direct links to cancel subscriptions for Apple, Google, Netflix and more. Stop unwanted charges now.">
+    
+    <script>
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff4757">
 </head>
-<body data-theme="light">
+<body>
 
 <nav>
     <div class="custom-select" id="langSelector" translate="no">
@@ -24,37 +31,43 @@
 </nav>
 
 <header>
+    <div class="counter-container">
+        <span id="counterLabel">Saved:</span>
+        <span id="moneyCounter">0</span>
+        <span id="currency">₴</span>
+    </div>
+
     <h1 id="mainTitle">StopPay 🛑</h1>
     <p id="mainDesc">Loading...</p>
     
     <div class="search-container">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search service..." onkeyup="filterServices()">
+        <input type="text" id="searchInput" class="search-input" onkeyup="filterServices()">
     </div>
 </header>
 
-<div id="siteContent" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
-
-<div id="seoContent" class="seo-block"></div>
+<div id="siteContent" style="width: 100%; max-width: 600px;"></div>
 
 <div class="donate-section">
     <h3 id="donateTitle">...</h3>
     <p id="donateDesc">...</p>
-    <a href="https://www.buymeacoffee.com/ВАШ_НІК" class="btn-donate" id="donateBtn" target="_blank">
-        ☕ Buy Me a Coffee
-    </a>
+    <a href="https://www.buymeacoffee.com/ВАШ_НІК" class="btn-donate" id="donateBtn" target="_blank">☕ Buy Me a Coffee</a>
 </div>
 
-<div class="fab-btn" onclick="toggleModal()">?</div>
+<div id="seoContent" class="seo-block"></div>
+
+<div class="fab-btn" onclick="toggleModal()" title="Add service">
+    <span class="fab-icon">+</span>
+    <span class="fab-text">Add service</span>
+</div>
 
 <div class="modal-overlay" id="feedbackModal" onclick="closeModalOutside(event)">
     <div class="modal-content">
         <span class="close-modal" onclick="toggleModal()">✕</span>
-        <h3 id="modalTitle">Missing a service?</h3>
-        <p id="modalDesc" style="opacity: 0.7; font-size: 14px; margin-bottom: 15px;">Tell us.</p>
-        
-        <form action="https://formspree.io/f/ВАШ_КОД_ФОРМИ" method="POST">
-            <input type="text" name="service_name" class="modal-input" placeholder="Netflix, Adobe..." required>
+        <h3 id="modalTitle">...</h3>
+        <p id="modalDesc">...</p>
+        <form action="https://formspree.io/f/ВАШ_КОД" method="POST">
+            <input type="text" name="service" class="modal-input" required>
             <button type="submit" class="modal-btn" id="modalBtn">Send</button>
         </form>
     </div>
