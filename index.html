@@ -3,71 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StopPay 🛑</title>
+    <title>StopPay 🛑 - Cancel Subscriptions Fast</title>
+    <meta name="description" content="Direct links to cancel subscriptions for Apple, Google, Netflix and more. Stop unwanted charges now.">
     <style>
-        :root { --bg: #f8f9fa; --card: #ebebeb; --text: #2d3436; --border: #d1d1d1; --hover: #dcdde1; }
+        :root { --bg: #f8f9fa; --card: #ebebeb; --text: #2d3436; --border: #d1d1d1; --hover: #dcdde1; --accent: #ff4757; }
         [data-theme="dark"] { --bg: #1a1a1a; --card: #3d3d3d; --text: #f8f9fa; --border: #555; --hover: #4b4b4b; }
         
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; position: relative; }
         
+        /* --- NAV & HEADER --- */
         nav { width: 100%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 10; }
+        header { text-align: center; margin-bottom: 20px; width: 100%; max-width: 600px; }
+        h1 { color: var(--accent); margin: 0; font-size: 2.2rem; }
+        #mainDesc { margin-bottom: 20px; }
 
-        /* --- КАСТОМНЕ МЕНЮ --- */
-        .custom-select { position: relative; width: auto; }
-        
-        /* Кнопка вибору мови */
-        .select-btn {
-            background: var(--card); border: 1px solid var(--border);
-            color: var(--text); padding: 8px 12px; border-radius: 12px;
-            cursor: pointer; display: flex; align-items: center; gap: 8px;
-            font-weight: bold; font-size: 14px; min-width: 80px; justify-content: space-between;
+        /* --- SEARCH BAR --- */
+        .search-container { width: 100%; max-width: 600px; margin-bottom: 30px; position: relative; }
+        .search-input { 
+            width: 100%; padding: 12px 15px; padding-left: 40px; 
+            border-radius: 12px; border: 1px solid var(--border); 
+            background: var(--card); color: var(--text); 
+            font-size: 16px; outline: none; box-sizing: border-box; transition: 0.2s;
         }
-        .select-btn:hover { background: var(--hover); }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
 
-        /* Випадаючий список */
-        .select-dropdown {
-            position: absolute; top: 110%; left: 0;
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 12px; padding: 5px; width: 160px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            display: none; /* Приховано за замовчуванням */
-            flex-direction: column; gap: 2px;
-            z-index: 100;
-        }
-        /* Клас для показу меню */
-        .select-dropdown.active { display: flex; animation: fadeIn 0.2s ease; }
-
-        /* Елемент списку */
-        .select-item {
-            padding: 10px; border-radius: 8px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px;
-            transition: 0.2s; font-size: 14px;
-        }
-        .select-item:hover { background: var(--hover); }
-        
-        /* Прапорці */
-        .flag-icon { width: 22px; height: 16px; object-fit: cover; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        
-        /* Стрілочка */
-        .arrow { font-size: 10px; opacity: 0.6; transition: 0.2s; }
-        .active .arrow { transform: rotate(180deg); }
-
-        /* Анімація появи */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- РЕШТА СТИЛІВ --- */
-        .btn-tool { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-size: 18px; }
-        
-        header { text-align: center; margin-bottom: 30px; }
-        h1 { color: #ff4757; margin: 0; font-size: 2.2rem; }
+        /* --- CARDS --- */
         .section-title { width: 100%; max-width: 600px; margin: 25px 0 10px; font-size: 13px; text-transform: uppercase; opacity: 0.7; font-weight: bold; letter-spacing: 1px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; width: 100%; max-width: 600px; margin-bottom: 20px; }
         .card { background: var(--card); padding: 18px; border-radius: 18px; text-align: center; text-decoration: none; color: inherit; font-weight: 600; border: 1px solid var(--border); transition: 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .card:active { transform: scale(0.95); }
+        .card:hover { border-color: var(--accent); }
         .card img { width: 48px; height: 48px; object-fit: contain; margin-bottom: 12px; }
+        .card.hidden { display: none; } /* Для пошуку */
+
+        /* --- SEO TEXT --- */
+        .seo-block { max-width: 600px; margin: 30px 0; font-size: 0.9rem; line-height: 1.5; opacity: 0.8; text-align: left; background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
+        .seo-block h3 { margin-top: 0; color: var(--accent); }
+
+        /* --- DONATE --- */
+        .donate-section { margin-top: auto; padding: 25px; background: var(--card); border-radius: 20px; text-align: center; max-width: 500px; border: 2px dashed #FFDD00; margin-bottom: 60px; /* Місце для кнопки */ }
+        .btn-donate { display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 12px 30px; background: #FFDD00; color: #000; text-decoration: none; border-radius: 30px; font-weight: bold; transition: 0.2s; }
+        .btn-donate:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 221, 0, 0.4); }
+
+        /* --- FLOATING FEEDBACK BTN --- */
+        .fab-btn {
+            position: fixed; bottom: 25px; right: 25px;
+            width: 50px; height: 50px; background: var(--accent);
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            z-index: 100; transition: 0.3s;
+        }
+        .fab-btn:hover { transform: scale(1.1); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 200;
+            display: none; align-items: flex-end; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
         
-        .donate-section { margin-top: auto; padding: 25px; background: var(--card); border-radius: 20px; text-align: center; max-width: 500px; border: 2px dashed #2ed573; margin-bottom: 20px; }
-        .btn-donate { display: inline-block; margin-top: 15px; padding: 12px 30px; background: #2ed573; color: white; text-decoration: none; border-radius: 30px; font-weight: bold; }
+        .modal-content {
+            background: var(--bg); width: 100%; max-width: 400px;
+            border-radius: 20px 20px 0 0; padding: 25px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease; border: 1px solid var(--border);
+        }
+        @media(min-width: 500px) {
+            .modal-overlay { align-items: center; }
+            .modal-content { border-radius: 20px; }
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .close-modal { float: right; cursor: pointer; font-size: 20px; opacity: 0.5; }
+        .modal-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); box-sizing: border-box; }
+        .modal-btn { width: 100%; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        /* --- CUSTOM MENU STYLES (FROM PREVIOUS STEP) --- */
+        .custom-select { position: relative; width: auto; }
+        .select-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 14px; min-width: 80px; justify-content: space-between; }
+        .select-dropdown { position: absolute; top: 110%; left: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 5px; width: 160px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: none; flex-direction: column; gap: 2px; z-index: 100; }
+        .select-dropdown.active { display: flex; animation: fadeIn 0.2s ease; }
+        .select-item { padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; font-size: 14px; }
+        .select-item:hover { background: var(--hover); }
+        .flag-icon { width: 22px; height: 16px; object-fit: cover; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+        .arrow { font-size: 10px; opacity: 0.6; transition: 0.2s; }
+        .active .arrow { transform: rotate(180deg); }
+        .btn-tool { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-size: 18px; }
     </style>
 </head>
 <body data-theme="light">
@@ -81,24 +106,46 @@
             </div>
             <span class="arrow">▼</span>
         </div>
-        <div class="select-dropdown" id="dropdownList">
-            </div>
+        <div class="select-dropdown" id="dropdownList"></div>
     </div>
-
     <button class="btn-tool" onclick="toggleTheme()" id="themeBtn">🌙</button>
 </nav>
 
 <header>
     <h1 id="mainTitle">StopPay 🛑</h1>
-    <p id="mainDesc">...</p>
+    <p id="mainDesc">Loading...</p>
+    
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search service..." onkeyup="filterServices()">
+    </div>
 </header>
 
 <div id="siteContent" style="width: 100%; display: flex; flex-direction: column; align-items: center;"></div>
 
+<div id="seoContent" class="seo-block"></div>
+
 <div class="donate-section">
     <h3 id="donateTitle">...</h3>
     <p id="donateDesc">...</p>
-    <a href="#" class="btn-donate" id="donateBtn" target="_blank">...</a>
+    <a href="https://www.buymeacoffee.com/ВАШ_НІК" class="btn-donate" id="donateBtn" target="_blank">
+        ☕ Buy Me a Coffee
+    </a>
+</div>
+
+<div class="fab-btn" onclick="toggleModal()">?</div>
+
+<div class="modal-overlay" id="feedbackModal" onclick="closeModalOutside(event)">
+    <div class="modal-content">
+        <span class="close-modal" onclick="toggleModal()">✕</span>
+        <h3 id="modalTitle">Missing a service?</h3>
+        <p id="modalDesc" style="opacity: 0.7; font-size: 14px; margin-bottom: 15px;">Tell us.</p>
+        
+        <form action="https://formspree.io/f/ВАШ_КОД_ФОРМИ" method="POST">
+            <input type="text" name="service_name" class="modal-input" placeholder="Netflix, Adobe..." required>
+            <button type="submit" class="modal-btn" id="modalBtn">Send</button>
+        </form>
+    </div>
 </div>
 
 <script>
@@ -109,94 +156,97 @@
             const response = await fetch('data.json');
             siteData = await response.json();
             applySavedSettings();
-            initCustomMenu(); // Будуємо меню
+            initCustomMenu();
             renderSite();
         } catch (e) { console.error(e); }
     }
 
-    // --- ЛОГІКА КАСТОМНОГО МЕНЮ ---
-    
+    // --- ПОШУК ---
+    function filterServices() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        
+        cards.forEach(card => {
+            const name = card.innerText.toLowerCase();
+            if (name.includes(input)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    // --- МОДАЛКА ---
+    function toggleModal() {
+        const modal = document.getElementById('feedbackModal');
+        modal.classList.toggle('active');
+    }
+    function closeModalOutside(e) {
+        if (e.target === document.getElementById('feedbackModal')) {
+            toggleModal();
+        }
+    }
+
+    // --- MENU LOGIC ---
     function initCustomMenu() {
         const list = document.getElementById('dropdownList');
-        const savedLang = localStorage.getItem('lang') || 'EN';
-        
-        // Очищаємо список перед заповненням
         list.innerHTML = '';
-
         Object.keys(siteData.languages).forEach(code => {
             const langData = siteData.languages[code];
-            
-            // Створюємо елемент списку
             const item = document.createElement('div');
             item.className = 'select-item';
-            item.innerHTML = `
-                <img src="flags/${code}.png" class="flag-icon">
-                <span>${langData.label}</span>
-            `;
-            // Додаємо дію при кліку
+            item.innerHTML = `<img src="flags/${code}.png" class="flag-icon"><span>${langData.label}</span>`;
             item.onclick = () => selectLanguage(code);
-            
             list.appendChild(item);
         });
-
-        updateVisuals(savedLang);
+        const saved = localStorage.getItem('lang') || 'EN';
+        updateVisuals(saved);
     }
-
     function toggleMenu() {
         document.getElementById('dropdownList').classList.toggle('active');
-        document.querySelector('.arrow').style.transform = 
-            document.getElementById('dropdownList').classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        document.querySelector('.arrow').style.transform = document.getElementById('dropdownList').classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
     }
-
     function selectLanguage(code) {
         localStorage.setItem('lang', code);
         updateVisuals(code);
         renderSite();
-        toggleMenu(); // Закриваємо меню
+        toggleMenu();
     }
-
     function updateVisuals(code) {
-        // Оновлюємо верхню кнопку
         document.getElementById('currentFlag').src = `flags/${code}.png`;
         document.getElementById('currentShort').innerText = siteData.languages[code].short || code;
     }
-
-    // Закриваємо меню, якщо клікнули десь збоку
     document.addEventListener('click', function(e) {
-        const selector = document.getElementById('langSelector');
-        if (!selector.contains(e.target)) {
+        if (!document.getElementById('langSelector').contains(e.target)) {
             document.getElementById('dropdownList').classList.remove('active');
             document.querySelector('.arrow').style.transform = 'rotate(0deg)';
         }
     });
 
-    // --- КІНЕЦЬ ЛОГІКИ МЕНЮ ---
-
-    function applySavedSettings() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            document.body.setAttribute('data-theme', savedTheme);
-            document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('themeBtn').innerText = '☀️';
-        }
-    }
-
+    // --- RENDER ---
     function renderSite() {
         const lang = localStorage.getItem('lang') || 'EN';
-        // Перевірка, чи існує така мова в JSON (на випадок помилки)
         const info = siteData.languages[lang] ? siteData.languages[lang] : siteData.languages['EN'];
         
         document.getElementById('mainTitle').innerText = info.title;
         document.getElementById('mainDesc').innerText = info.desc;
+        document.getElementById('searchInput').placeholder = info.search_placeholder || "Search...";
+        
+        // SEO Text
+        document.getElementById('seoContent').innerHTML = info.seo_text || "";
+        
+        // Modal Texts
+        document.getElementById('modalTitle').innerText = info.feedback_title || "Feedback";
+        document.getElementById('modalDesc').innerText = info.feedback_desc || "";
+        document.getElementById('modalBtn').innerText = info.feedback_btn || "Send";
+
+        // Donate
         document.getElementById('donateTitle').innerText = info.donate_t;
         document.getElementById('donateDesc').innerText = info.donate_d;
         document.getElementById('donateBtn').innerText = info.donate_b;
 
         const container = document.getElementById('siteContent');
         container.innerHTML = '';
-
         const types = ['global', lang]; 
         types.forEach(type => {
             const services = siteData.services.filter(s => s.type === type);
@@ -205,7 +255,6 @@
                 title.className = 'section-title';
                 title.innerText = type === 'global' ? info.global_title : info.local_title;
                 container.appendChild(title);
-
                 const grid = document.createElement('div');
                 grid.className = 'grid';
                 services.forEach(s => {
@@ -221,11 +270,15 @@
         });
     }
 
+    function applySavedSettings() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) { document.body.setAttribute('data-theme', savedTheme); document.getElementById('themeBtn').innerText = savedTheme === 'dark' ? '☀️' : '🌙'; }
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.body.setAttribute('data-theme', 'dark'); document.getElementById('themeBtn').innerText = '☀️'; }
+    }
     function toggleTheme() {
-        const body = document.body;
-        const isDark = body.getAttribute('data-theme') === 'dark';
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
         const newTheme = isDark ? 'light' : 'dark';
-        body.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
         document.getElementById('themeBtn').innerText = newTheme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', newTheme);
     }
@@ -233,4 +286,4 @@
     loadData();
 </script>
 </body>
-</html>
+            </html>
