@@ -161,19 +161,49 @@
         } catch (e) { console.error(e); }
     }
 
-    // --- ПОШУК ---
+    // --- ОНОВЛЕНИЙ ПОШУК (ШУКАЄ ВСЮДИ) ---
     function filterServices() {
-        const input = document.getElementById('searchInput').value.toLowerCase();
-        const cards = document.querySelectorAll('.card');
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const container = document.getElementById('siteContent');
+
+        // 1. Якщо пошук порожній — повертаємо стандартний вигляд
+        if (!query) {
+            renderSite();
+            return;
+        }
+
+        // 2. Якщо щось ввели — очищаємо екран і шукаємо по ВСІЙ базі
+        container.innerHTML = '';
         
-        cards.forEach(card => {
-            const name = card.innerText.toLowerCase();
-            if (name.includes(input)) {
-                card.classList.remove('hidden');
-            } else {
-                card.classList.add('hidden');
-            }
-        });
+        // Фільтруємо всі сервіси з JSON
+        const matches = siteData.services.filter(s => s.name.toLowerCase().includes(query));
+
+        if (matches.length > 0) {
+            const title = document.createElement('div');
+            title.className = 'section-title';
+            title.innerText = "Results / Результати 🔍"; // Можна зробити переклад, але і так зрозуміло
+            container.appendChild(title);
+
+            const grid = document.createElement('div');
+            grid.className = 'grid';
+            
+            matches.forEach(s => {
+                grid.innerHTML += createCardHTML(s);
+            });
+            container.appendChild(grid);
+        } else {
+            container.innerHTML = '<p style="opacity: 0.5; margin-top: 20px;">Nothing found / Нічого не знайдено 🤷‍♂️</p>';
+        }
+    }
+
+    // Виніс генерацію HTML картки в окрему функцію, щоб не дублювати код
+    function createCardHTML(s) {
+        return `
+            <a href="${s.url}" class="card" target="_blank">
+                <img src="${s.img}" alt="${s.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1055/1055183.png'">
+                <div>${s.name}</div>
+            </a>
+        `;
     }
 
     // --- МОДАЛКА ---
@@ -247,6 +277,7 @@
 
         const container = document.getElementById('siteContent');
         container.innerHTML = '';
+
         const types = ['global', lang]; 
         types.forEach(type => {
             const services = siteData.services.filter(s => s.type === type);
@@ -255,15 +286,12 @@
                 title.className = 'section-title';
                 title.innerText = type === 'global' ? info.global_title : info.local_title;
                 container.appendChild(title);
+
                 const grid = document.createElement('div');
                 grid.className = 'grid';
                 services.forEach(s => {
-                    grid.innerHTML += `
-                        <a href="${s.url}" class="card" target="_blank">
-                            <img src="${s.img}" alt="${s.name}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/1055/1055183.png'">
-                            <div>${s.name}</div>
-                        </a>
-                    `;
+                    // ТУТ ВИКЛИКАЄМО НОВУ ФУНКЦІЮ
+                    grid.innerHTML += createCardHTML(s);
                 });
                 container.appendChild(grid);
             }
