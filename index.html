@@ -143,21 +143,27 @@
 
     // Ініціалізація при завантаженні
     window.onload = () => {
-        // Тема
+        // 1. Налаштування теми
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
             toggleTheme();
         }
         
-        // Мова
-        const userLang = navigator.language.substring(0, 2).toUpperCase();
+        // 2. Налаштування мови
+        // Отримуємо мову (наприклад, 'uk-UA' стає 'UA', 'en-US' стає 'EN')
+        let userLang = navigator.language.substring(0, 2).toUpperCase();
+        if (userLang === 'UK') userLang = 'UA'; // Корекція для української
+        
         const select = document.getElementById('langSelect');
         
+        // Перевіряємо, чи є у нас така мова в списку, якщо ні — ставимо EN
         if (translations[userLang]) {
             select.value = userLang;
         } else {
             select.value = 'EN';
         }
-        changeLang(); // Запускаємо оновлення текстів
+
+        // ВАЖЛИВО: Викликаємо функцію оновлення контенту
+        changeLang(); 
     };
 </script>
 
