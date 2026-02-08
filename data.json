@@ -1,0 +1,52 @@
+{
+  "languages": {
+    "UA": {
+      "title": "StopPay 🛑",
+      "desc": "Скасувати підписки в один клік",
+      "global_title": "Глобальні сервіси",
+      "local_title": "Українські сервіси",
+      "donate_t": "Зберегли гроші? 💸",
+      "donate_d": "Підтримайте проект чашкою кави.",
+      "donate_b": "Підтримати ☕"
+    },
+    "PL": {
+      "title": "StopPay 🛑",
+      "desc": "Anuluj subskrypcje jednym kliknięciem",
+      "global_title": "Usługi globalne",
+      "local_title": "Usługi w Polsce",
+      "donate_t": "Oszczędziłeś pieniądze? 💸",
+      "donate_d": "Wesprzyj projekt filiżanką kawy.",
+      "donate_b": "Wesprzyj ☕"
+    }
+  },
+  "services": [
+    {
+      "id": "google",
+      "name": "Google Play",
+      "url": "https://play.google.com/store/account/subscriptions",
+      "img": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg",
+      "type": "global"
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "url": "https://www.netflix.com/cancelplan",
+      "img": "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg",
+      "type": "global"
+    },
+    {
+      "id": "megogo",
+      "name": "Megogo",
+      "url": "https://megogo.net/uk/cabinet/subscription",
+      "img": "icons/MEGOGO.png",
+      "type": "UA"
+    },
+    {
+      "id": "allegro",
+      "name": "Allegro Smart",
+      "url": "https://allegro.pl/moje-allegro/zakupy/allegro-smart",
+      "img": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Allegro.pl_logo.svg",
+      "type": "PL"
+    }
+  ]
+}
