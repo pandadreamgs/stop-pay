@@ -1,7 +1,7 @@
 {
   "languages": {
     "UA": {
-      "label": "🇺🇦 Українська",
+      "label": "Українська",
       "short": "UA",
       "title": "StopPay 🛑",
       "desc": "Скасувати підписки в один клік",
@@ -19,7 +19,7 @@
       "donate_b": "Buy Me a Coffee ☕"
     },
     "EN": {
-      "label": "🇺🇸 English",
+      "label": "English",
       "short": "EN",
       "title": "StopPay 🛑",
       "desc": "Cancel subscriptions in one click",
