@@ -64,7 +64,7 @@ function renderSite() {
     safeSet('footerCreated', info.footer_created);
     safeSet('footerSlogan', info.footer_slogan);
     safeSet('counterLabel', info.total_saved);
-    safeSet('mainTitle', info.title);
+    //safeSet('mainTitle', info.title);
     safeSet('mainDesc', info.desc);
     safeSet('donateTitle', info.donate_t);
     safeSet('donateDesc', info.donate_d);
