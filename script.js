@@ -1,19 +1,10 @@
 let siteData = null;
-let totalSavedUsd = 0; // Базове значення в USD, яке прийде з сервера
+let totalSavedUsd = 0; 
 
-// Унікальний ключ для твого проекту
-const API_KEY = 'A3$D34gsas3#$Fas';
+const API_KEY = 'A3$D34gsas3#$Fas'; // Твій унікальний ключ
 const API_URL = `https://api.countapi.it`;
 
-// --- КОНВЕРТАЦІЯ ТА ЛІЧИЛЬНИК ---
-
-function getPriceInLocalCurrency(priceInUsd, info) {
-    const rate = info.exchange_rate || 1;
-    const localPrice = priceInUsd * rate;
-    return (info.currency_symbol === '₴') 
-        ? Math.round(localPrice) 
-        : localPrice.toFixed(2);
-}
+// --- ЛІЧИЛЬНИК ТА СИНХРОНІЗАЦІЯ ---
 
 async function syncGlobalCounter(amountUsd = 0) {
     try {
@@ -23,7 +14,6 @@ async function syncGlobalCounter(amountUsd = 0) {
         } else {
             response = await fetch(`${API_URL}/get/stoppay.io/${API_KEY}`);
             if (response.status === 404) {
-                // Створюємо початкове значення 2800$ (приблизно 120к грн)
                 await fetch(`${API_URL}/create/stoppay.io/${API_KEY}?value=2800`);
                 return 2800;
             }
@@ -32,7 +22,7 @@ async function syncGlobalCounter(amountUsd = 0) {
         return data.value;
     } catch (e) {
         console.error("Counter API error:", e);
-        return totalSavedUsd;
+        return 2800; 
     }
 }
 
@@ -42,14 +32,12 @@ async function updateCounter(addUsd) {
     const counterEl = document.getElementById('moneyCounter');
     const currencyEl = document.getElementById('currency');
 
-    // 1. Оновлюємо локально
     totalSavedUsd += addUsd;
     const displayValue = Math.round(totalSavedUsd * info.exchange_rate);
     
     if (counterEl) counterEl.innerText = displayValue.toLocaleString();
     if (currencyEl) currencyEl.innerText = info.currency_symbol;
 
-    // 2. Синхронізуємо з сервером
     if (addUsd > 0) {
         const newGlobalUsd = await syncGlobalCounter(addUsd);
         totalSavedUsd = newGlobalUsd;
@@ -73,7 +61,7 @@ async function loadData() {
     } catch (e) { console.error("Load error:", e); }
 }
 
-// --- РЕНДЕРИНГ ---
+// --- РЕНДЕРИНГ (ЧИСТИЙ ДИЗАЙН БЕЗ ЦІН) ---
 
 function renderSite() {
     const lang = localStorage.getItem('lang') || 'UA';
@@ -83,7 +71,7 @@ function renderSite() {
     if (!container) return;
     container.innerHTML = '';
 
-    // Оновлення статичних текстів
+    // Оновлення текстів
     document.getElementById('mainTitle').innerText = info.title;
     document.getElementById('mainDesc').innerText = info.desc;
     document.getElementById('searchInput').placeholder = info.search_placeholder;
@@ -95,7 +83,6 @@ function renderSite() {
     document.getElementById('modalDesc').innerText = info.feedback_desc;
     document.getElementById('modalBtn').innerText = info.feedback_btn;
 
-    // Глобальний лічильник (відображення у валюті)
     updateCounter(0);
 
     const groups = {};
@@ -118,22 +105,18 @@ function renderSite() {
                 <span class="arrow-cat">▼</span>
             </div>
             <div class="category-content">
-                ${groups[catKey].map(s => {
-                    const localPrice = getPriceInLocalCurrency(s.price, info);
-                    return `
+                ${groups[catKey].map(s => `
                     <a href="${s.url}" class="card" target="_blank" onclick="updateCounter(${s.price})">
                         <img src="${s.img}" alt="${s.name}" loading="lazy" onerror="this.src='icons/default.png'">
-                        <div class="card-info">
-                            <div class="card-name">${s.name}</div>
-                            <div class="card-price">-${localPrice} ${info.currency_symbol}</div>
-                        </div>
-                    </a>`;
-                }).join('')}
+                        <div class="card-name">${s.name}</div>
+                    </a>`).join('')}
             </div>
         `;
         container.appendChild(wrapper);
     });
 }
+
+// --- ПОШУК ---
 
 function filterServices() {
     const query = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -151,14 +134,10 @@ function filterServices() {
         grid.className = 'category-content';
         grid.style.display = 'grid';
         matches.forEach(s => {
-            const localPrice = getPriceInLocalCurrency(s.price, info);
             grid.innerHTML += `
                 <a href="${s.url}" class="card" target="_blank" onclick="updateCounter(${s.price})">
                     <img src="${s.img}" alt="${s.name}">
-                    <div class="card-info">
-                        <div class="card-name">${s.name}</div>
-                        <div class="card-price">-${localPrice} ${info.currency_symbol}</div>
-                    </div>
+                    <div class="card-name">${s.name}</div>
                 </a>`;
         });
         container.appendChild(grid);
@@ -167,7 +146,7 @@ function filterServices() {
     }
 }
 
-// --- ІНТЕРФЕЙС ---
+// --- СТАНДАРТНІ ФУНКЦІЇ ІНТЕРФЕЙСУ ---
 
 function initCustomMenu() {
     const list = document.getElementById('dropdownList');
