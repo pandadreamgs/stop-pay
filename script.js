@@ -3,6 +3,46 @@ let siteData = null;
 // Початкове значення лічильника (зберігається в браузері)
 let totalSaved = parseInt(localStorage.getItem('totalSaved')) || 124500;
 
+// Унікальний ключ для твого проекту (зміни 'stoppay_project' на щось своє)
+const API_KEY = 'stoppay_global_counter';
+const API_URL = `https://api.countapi.it`;
+
+// Функція для отримання та оновлення глобального лічильника
+async function syncGlobalCounter(amount = 0) {
+    try {
+        let response;
+        if (amount > 0) {
+            // Додаємо суму до глобального лічильника
+            response = await fetch(`${API_URL}/update/stoppay.io/${API_KEY}?amount=${amount}`);
+        } else {
+            // Просто отримуємо поточне значення при завантаженні
+            response = await fetch(`${API_URL}/get/stoppay.io/${API_KEY}`);
+            // Якщо ключа ще немає, створимо його (перший запуск)
+            if (response.status === 404) {
+                await fetch(`${API_URL}/create/stoppay.io/${API_KEY}?value=124500`);
+                return 124500;
+            }
+        }
+        const data = await response.json();
+        return data.value;
+    } catch (e) {
+        console.error("Counter API error:", e);
+        return totalSaved; // Повертаємо локальне значення, якщо сервіс лежить
+    }
+}
+
+async function updateCounter(add) {
+    // 1. Оновлюємо локально для миттєвого ефекту
+    totalSaved += add;
+    const counterEl = document.getElementById('moneyCounter');
+    if (counterEl) counterEl.innerText = totalSaved.toLocaleString();
+    
+    // 2. Відправляємо дані в глобальну базу
+    if (add > 0) {
+        const globalValue = await syncGlobalCounter(add);
+        if (counterEl) counterEl.innerText = globalValue.toLocaleString();
+    }
+}
 // --- ЗАВАНТАЖЕННЯ ---
 async function loadData() {
     try {
