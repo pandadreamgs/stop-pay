@@ -31,18 +31,6 @@ async function syncGlobalCounter(amount = 0) {
     }
 }
 
-async function updateCounter(add) {
-    // 1. Оновлюємо локально для миттєвого ефекту
-    totalSaved += add;
-    const counterEl = document.getElementById('moneyCounter');
-    if (counterEl) counterEl.innerText = totalSaved.toLocaleString();
-    
-    // 2. Відправляємо дані в глобальну базу
-    if (add > 0) {
-        const globalValue = await syncGlobalCounter(add);
-        if (counterEl) counterEl.innerText = globalValue.toLocaleString();
-    }
-}
 // --- ЗАВАНТАЖЕННЯ ---
 async function loadData() {
     try {
@@ -60,12 +48,23 @@ async function loadData() {
 }
 
 // --- ЛІЧИЛЬНИК ---
-function updateCounter(add) {
+async function updateCounter(add) {
+    // 1. Оновлюємо локально для миттєвого відгуку інтерфейсу
     totalSaved += add;
     localStorage.setItem('totalSaved', totalSaved);
+    
     const counterEl = document.getElementById('moneyCounter');
     if (counterEl) {
         counterEl.innerText = totalSaved.toLocaleString();
+    }
+
+    // 2. ВІДПРАВЛЯЄМО НА СЕРВЕР (якщо це не просто ініціалізація з нулем)
+    if (add > 0) {
+        const newValue = await syncGlobalCounter(add);
+        // Оновлюємо цифру ще раз значенням, яке повернув сервер (синхронізація з іншими юзерами)
+        if (counterEl) {
+            counterEl.innerText = newValue.toLocaleString();
+        }
     }
 }
 
