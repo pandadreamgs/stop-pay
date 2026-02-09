@@ -27,7 +27,8 @@ def add_service():
 
     # Промпт для ШІ
     prompt = f"""
-    Ти — спеціаліст із наповнення бази даних сервісів StopPay. Твоє завдання: отримати назву сервісу та повернути JSON-об'єкт.
+
+    Ти — спеціаліст із наповнення бази даних сервісів StopPay. Твоє завдання: візьми назву сервісу {service_name} та поверни JSON-об'єкт.
 
     id: латиниця, нижній регістр, без пробілів.
     
@@ -41,7 +42,6 @@ def add_service():
     
     type: 'UA', якщо сервіс локальний для України, інакше 'global'. Поверни ТІЛЬКИ чистий JSON."
      
-    Find subscription cancellation info for '{service_name}'.
     Return ONLY a JSON object:
     {{
       "id": "lowercase_name",
