@@ -4,7 +4,7 @@ let siteData = null;
 let totalSaved = parseInt(localStorage.getItem('totalSaved')) || 124500;
 
 // Унікальний ключ для твого проекту (зміни 'stoppay_project' на щось своє)
-const API_KEY = 'stoppay_global_counter';
+const API_KEY = 'A3$D34gsas3#$Fas';
 const API_URL = `https://api.countapi.it`;
 
 // Функція для отримання та оновлення глобального лічильника
