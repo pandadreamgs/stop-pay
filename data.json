@@ -99,15 +99,6 @@
       "type": "UA"
     },
     {
-      "id": "sweet.tv",
-      "name": "Sweet.tv",
-      "category": "tv",
-      "price": 6.99,
-      "url": "https://sweet.tv/cabinet/subscriptions",
-      "img": "icons/Sweet.tv_logo.png",
-      "type": "UA"
-    },
-    {
       "id": "kyivstar-tv",
       "name": "Kyivstar TV",
       "category": "tv",
