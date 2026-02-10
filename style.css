@@ -112,9 +112,36 @@ h1 { color: var(--accent); margin: 0; font-size: 2.2rem; }
 .seo-block h3 { margin-top: 0; color: var(--accent); }
 
 /* --- DONATE --- */
-.donate-section { margin-top: auto; padding: 25px; background: var(--card); border-radius: 20px; text-align: center; max-width: 500px; border: 2px dashed #FFDD00; margin-bottom: 60px; }
-.btn-donate { display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 12px 30px; background: #FFDD00; color: #000; text-decoration: none; border-radius: 30px; font-weight: bold; transition: 0.2s; }
-.btn-donate:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 221, 0, 0.4); }
+.donate-section { 
+    margin-top: auto; 
+    padding: 25px; 
+    background: var(--card); 
+    border-radius: 20px; 
+    text-align: center; 
+    max-width: 500px; 
+    border: 2px dashed #FFDD00; 
+    margin-bottom: 60px; 
+}
+
+.btn-donate { 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin-top: 15px; 
+    padding: 12px 30px; 
+    background: #FFDD00; 
+    color: #000 !important; /* Додаємо !important, щоб колір не перебивався темою */
+    text-decoration: none; 
+    border-radius: 30px; 
+    font-weight: bold; 
+    transition: 0.2s; 
+}
+
+.btn-donate:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 5px 15px rgba(255, 221, 0, 0.4); 
+    color: #000 !important; /* Щоб при наведенні текст теж залишався чорним */
+}
 
 /* --- FLOATING FEEDBACK BTN --- */
 .fab-btn {
