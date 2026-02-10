@@ -27,8 +27,7 @@
       "footer_slogan": "Маленькі інструменти, великі мрії.",
       "cat_tv": "Телебачення та Стрімінг",
       "cat_local": "Українські сервіси",
-      "cat_phone": "Мобільні додатки",
-      "cat_cloud_storage": "Хмарне сховище"
+      "cat_phone": "Мобільні додатки"
     },
     "EN": {
       "label": "English",
@@ -57,8 +56,7 @@
       "footer_slogan": "Small tools, big dreams.",
       "cat_tv": "Television and streaming",
       "cat_local": "England services",
-      "cat_phone": "Mobile adverts",
-      "cat_cloud_storage": "Cloud Storage"
+      "cat_phone": "Mobile adverts"
     }
   },
   "services": [
