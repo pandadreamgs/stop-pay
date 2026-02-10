@@ -104,6 +104,15 @@
       "url": "https://sweet.tv/cabinet/subscriptions",
       "img": "icons/Sweet.tv_logo.png",
       "type": "UA"
+    },
+    {
+      "id": "kyivstar-tv",
+      "name": "Kyivstar TV",
+      "category": "streaming-video",
+      "price": 4.0,
+      "url": "https://tv.kyivstar.ua/profile",
+      "img": "https://tv.kyivstar.ua/static-site/img/logo.svg",
+      "type": "UA"
     }
   ]
 }
