@@ -123,7 +123,6 @@ h1 { color: var(--accent); margin: 0; font-size: 2.2rem; }
     margin-bottom: 60px; 
 }
 
-.btn-donate { 
 .btn-donate {
     display: inline-block;
     background-color: #ffdd00; /* Жовтий колір BMC */
