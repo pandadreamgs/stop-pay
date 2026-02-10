@@ -104,24 +104,6 @@
       "url": "https://sweet.tv/cabinet/subscriptions",
       "img": "icons/Sweet.tv_logo.png",
       "type": "UA"
-    },
-    {
-      "id": "kyivstar-tv",
-      "name": "Kyivstar TV",
-      "category": "streaming-video",
-      "price": 4.0,
-      "url": "https://tv.kyivstar.ua/profile",
-      "img": "https://tv.kyivstar.ua/static-site/img/logo.svg",
-      "type": "UA"
-    },
-    {
-      "id": "youtube-premium",
-      "name": "YouTube Premium",
-      "category": "streaming-video",
-      "price": 13.99,
-      "url": "https://www.youtube.com/paid_memberships",
-      "img": "https://upload.wikimedia.org/wikipedia/commons/c/ca/YouTube_Premium_logo.svg",
-      "type": "global"
     }
   ]
 }
