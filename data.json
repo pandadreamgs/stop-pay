@@ -27,7 +27,8 @@
       "donate_d": "Підтримайте проект чашкою кави.",
       "donate_b": "Buy Me a Coffee ☕",
       "footer_created": "Створено ",
-      "footer_slogan": "Маленькі інструменти, великі мрії."
+      "footer_slogan": "Маленькі інструменти, великі мрії.",
+      "cat_cloud_storage": "Хмарне сховище"
     },
     "EN": {
       "label": "English",
@@ -56,7 +57,8 @@
       "donate_d": "Support the project with a coffee.",
       "donate_b": "Buy Me a Coffee ☕",
       "footer_created": "Created by ",
-      "footer_slogan": "Small tools, big dreams."
+      "footer_slogan": "Small tools, big dreams.",
+      "cat_cloud_storage": "Cloud Storage"
     }
   },
   "services": [
@@ -104,6 +106,15 @@
       "url": "https://sweet.tv/cabinet/subscriptions",
       "img": "icons/Sweet.tv_logo.png",
       "type": "UA"
+    },
+    {
+      "id": "google-one",
+      "name": "Google One",
+      "category": "cloud_storage",
+      "price": 1.99,
+      "url": "https://myaccount.google.com/subscriptions",
+      "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Google_One_logo.svg/2560px-Google_One_logo.svg.png",
+      "type": "global"
     }
   ]
 }
