@@ -5,11 +5,8 @@
     <body>
     <script>
         const userLang = navigator.language || navigator.userLanguage;
-        if (userLang.startsWith('uk') || userLang.startsWith('ru')) {
-            window.location.href = '/ua/';
-        } else {
-            window.location.href = '/en/';
-        }
+        const target = (userLang.startsWith('uk') || userLang.startsWith('ru')) ? '/ua/' : '/en/';
+        window.location.href = '/stop_pay' + target;
     </script>
     </body>
     </html>
