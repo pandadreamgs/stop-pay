@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StopPay</title>
+    
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}">
     
     <script>
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -13,7 +15,7 @@
     </script>
 
     <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#ff4757">
 </head>
 <body>
@@ -40,22 +42,26 @@
     </div>
 
     <h1 id="mainTitle">
-        <img src="Logo.png" alt="StopPay" style="height: 50px; width: auto;">
+        <a href="/" style="text-decoration: none;">
+            <img src="/Logo.png" alt="StopPay" style="height: 50px; width: auto;">
+        </a>
     </h1>
     <p id="mainDesc">Loading...</p>
     
-    <div class="search-container">
+    <div class="search-container" id="searchBox">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" class="search-input" onkeyup="filterServices()">
     </div>
 </header>
 
-<div id="siteContent" style="width: 100%; max-width: 600px;"></div>
+<main id="siteContent" style="width: 100%; max-width: 600px; min-height: 40vh;">
+    {{ content }}
+</main>
 
 <div class="donate-section">
     <h3 id="donateTitle">...</h3>
     <p id="donateDesc">...</p>
-    <a href="https://www.buymeacoffee.com/ВАШ_НІК" class="btn-donate" id="donateBtn" target="_blank">☕ Buy Me a Coffee</a>
+    <a href="https://www.buymeacoffee.com/PandaDream" class="btn-donate" id="donateBtn" target="_blank">☕ Buy Me a Coffee</a>
 </div>
 
 <div id="seoContent" class="seo-block"></div>
@@ -64,17 +70,16 @@
     <span class="fab-icon">+</span>
     <span class="fab-text">Add service</span>
 </div>
-    <div class="modal-overlay" id="feedbackModal" onclick="closeModalOutside(event)">
+
+<div class="modal-overlay" id="feedbackModal" onclick="closeModalOutside(event)">
     <div class="modal-content">
         <span class="close-modal" onclick="toggleModal()">✕</span>
         <h3 id="modalTitle">...</h3>
         <p id="modalDesc">...</p>
-        
         <input type="text" id="aiServiceInput" class="modal-input" required>
-        
         <button type="button" class="modal-btn" id="modalBtn" onclick="sendToAi()">Send</button>
     </div>
-    </div>
+</div>
 
 <footer style="text-align: center; padding: 40px 20px; margin-top: 40px; border-top: 1px solid rgba(128,128,128,0.1);">
     <p style="margin: 0; opacity: 0.7; font-size: 0.9rem;">
@@ -86,6 +91,6 @@
     </p>
 </footer>
 
-<script src="script.js"></script>
+<script src="/assets/js/script.js"></script>
 </body>
-      </html>
+</html>
