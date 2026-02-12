@@ -3,7 +3,13 @@ let totalSavedUsd = 0;
 const BASE_URL = "/stop_pay"; 
 const BRIDGE_URL = "https://script.google.com/macros/s/AKfycbywfH00K-KVqfhkPQwWy4P2Knaa0hS1KP1TD6zDfn2K9Bd31Td1pPRxGRj5t1Xt7j1voQ/exec"; 
 
-// --- ПОШУК (Миємо старий стиль пошуку) ---
+// Список доступних країн (додай нові сюди)
+const COUNTRIES = {
+    "ua": { label: "Україна", short: "UA" },
+    "us": { label: "United States", short: "US" }
+};
+
+// --- ПОШУК ---
 function handleSearch(query) {
     const q = query.toLowerCase().trim();
     const categories = document.querySelectorAll('.category-wrapper');
@@ -28,10 +34,8 @@ function handleSearch(query) {
 // --- ЛІЧИЛЬНИК ---
 async function syncGlobalCounter(amountUsd = 0) {
     if (!BRIDGE_URL) return;
-    const url = new URL(BRIDGE_URL);
-    if (amountUsd > 0) url.searchParams.set('amount', amountUsd);
     try {
-        const response = await fetch(url);
+        const response = await fetch(BRIDGE_URL);
         const data = await response.json();
         if (data && data.total_saved_usd !== undefined) {
             totalSavedUsd = data.total_saved_usd;
@@ -53,7 +57,7 @@ function updateCounterDisplay() {
     if (currencyEl) currencyEl.innerText = siteData.ui.currency_symbol;
 }
 
-// --- РЕНДЕРИНГ (Повертаємо стильні картки) ---
+// --- РЕНДЕРИНГ ---
 function renderSite() {
     if (!siteData || !siteData.ui) return;
     const info = siteData.ui;
@@ -61,9 +65,9 @@ function renderSite() {
     if (!container) return; 
 
     container.innerHTML = '';
-    const safeSet = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
     
-    // Тексти інтерфейсу
+    // Оновлення текстів інтерфейсу
+    const safeSet = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
     safeSet('counterLabel', info.total_saved);
     safeSet('mainDesc', info.desc);
     safeSet('donateTitle', info.ui.donate_t);
@@ -74,25 +78,21 @@ function renderSite() {
     if (seoEl) seoEl.innerHTML = info.seo_text || '';
     
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.placeholder = info.ui.search_placeholder;
-        // Прив'язуємо функцію пошуку до інпута
-        searchInput.oninput = (e) => handleSearch(e.target.value);
-    }
+    if (searchInput) searchInput.placeholder = info.ui.search_placeholder;
 
-    updateCounterDisplay();
-
+    // Групування
     const groups = { 'local': [] };
     const currentCountry = siteData.currentLang.toLowerCase();
 
     siteData.services.forEach(s => {
-        if (s.type === 'global' || s.type === currentCountry) {
-            const type = s.type === currentCountry ? 'local' : (s.category || 'other');
+        if (s.type === 'global' || s.type.toLowerCase() === currentCountry) {
+            const type = s.type.toLowerCase() === currentCountry ? 'local' : (s.category || 'other');
             if (!groups[type]) groups[type] = [];
             groups[type].push(s);
         }
     });
 
+    // Вивід категорій
     Object.keys(groups).sort((a, b) => a === 'local' ? -1 : 1).forEach(key => {
         if (groups[key].length === 0) return;
         const wrapper = document.createElement('div');
@@ -106,21 +106,32 @@ function renderSite() {
             </div>
             <div class="category-content">
                 ${groups[key].map(s => `
-                    <div class="card" onclick="handleServiceClick(${s.price || 0}, '${s.id}')">
+                    <div class="card" onclick="handleServiceClick('${s.id}')">
                         <div class="card-icon-wrapper">
                             <img src="${BASE_URL}/${s.img || s.icon}" onerror="this.src='${BASE_URL}/assets/icons/default.png'">
                         </div>
+                        <div class="card-name">${s.name}</div>
+                    </div>`).join('')}
+            </div>`;
+        container.appendChild(wrapper);
+    });
+    updateCounterDisplay();
+}
+
+function handleServiceClick(serviceId) {
+    const lang = siteData.currentLang.toLowerCase();
+    window.location.href = `${BASE_URL}/${lang}/${serviceId}/`;
+}
+
+// --- СИСТЕМНІ ФУНКЦІЇ ---
 async function loadData() {
     try {
         const pathParts = window.location.pathname.split('/');
-        // Визначаємо мову з URL (напр. /stop_pay/ua/ -> ua)
         let langCode = 'ua';
+        // Шукаємо ua або us в шляху
         if (pathParts.includes('ua')) langCode = 'ua';
-        if (pathParts.includes('us')) langCode = 'us';
+        else if (pathParts.includes('us')) langCode = 'us';
 
-        console.log("Loading for lang:", langCode);
-
-        // Завантажуємо дані паралельно
         const [uiRes, servRes] = await Promise.all([
             fetch(`${BASE_URL}/i18n/${langCode}.json`),
             fetch(`${BASE_URL}/data.json`)
@@ -129,35 +140,28 @@ async function loadData() {
         const uiData = await uiRes.json();
         const allData = await servRes.json();
 
-        // Формуємо об'єкт так, щоб renderSite його розумів
         siteData = {
             ui: uiData,
             services: allData.services,
             currentLang: langCode
         };
 
-        console.log("Data loaded successfully:", siteData);
-
         applySavedSettings();
-        renderSite(); // МАЄ З'ЯВИТИСЯ ТУТ!
+        initCustomMenu();
+        renderSite();
         syncGlobalCounter();
-        
-    } catch (e) { 
-        console.error("КРИТИЧНА ПОМИЛКА ЗАВАНТАЖЕННЯ:", e); 
-    }
+    } catch (e) { console.error("Критична помилка завантаження:", e); }
 }
-
 
 function initCustomMenu() {
     const list = document.getElementById('dropdownList');
     if (!list) return;
     list.innerHTML = '';
     
-    Object.keys(siteData.availableCountries).forEach(code => {
-        const country = siteData.availableCountries[code];
+    Object.keys(COUNTRIES).forEach(code => {
         const item = document.createElement('div');
         item.className = 'select-item';
-        item.innerHTML = `<img src="${BASE_URL}/assets/icons/flags/${code.toUpperCase()}.png" class="flag-icon"><span>${country.label}</span>`;
+        item.innerHTML = `<img src="${BASE_URL}/assets/icons/flags/${code.toUpperCase()}.png" class="flag-icon"><span>${COUNTRIES[code].label}</span>`;
         item.onclick = () => {
             window.location.href = `${BASE_URL}/${code.toLowerCase()}/`;
         };
@@ -173,7 +177,7 @@ function updateVisuals(code) {
     if (short) short.innerText = code.toUpperCase();
 }
 
-// Меню та Тема
+// Тема та модалки
 function toggleMenu() { document.getElementById('dropdownList').classList.toggle('active'); }
 function toggleTheme() {
     const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -188,3 +192,4 @@ function toggleModal() { document.getElementById('feedbackModal').classList.togg
 function closeModalOutside(e) { if (e.target.id === 'feedbackModal') toggleModal(); }
 
 loadData();
+                            
