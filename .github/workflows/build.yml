@@ -3,7 +3,10 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # Запускати, коли ти щось міняєш у файлах
+      - main
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -23,6 +26,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist  # Вказуємо GitHub, що публікувати треба тільки папку dist
-          branch: gh-pages # Публікуємо в окрему гілку для хостингу
-          
+          folder: dist
+          branch: gh-pages
