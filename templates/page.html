@@ -1,6 +1,6 @@
 <div class="service-container">
-    <h2 id="serviceTitle" style="margin-top: 0;">{{ title }}</h2>
-    <p style="opacity: 0.8; margin-bottom: 25px;">{{ description }}</p>
+    <h2 id="serviceTitle" style="margin-top: 0; font-size: 1.8rem; color: var(--text);">{{ title }}</h2>
+    <p style="opacity: 0.8; margin-bottom: 30px; line-height: 1.5;">{{ description }}</p>
     
     <div class="instruction-card">
         <ol class="steps-list">
@@ -8,11 +8,13 @@
         </ol>
     </div>
 
-    <div style="margin-top: 30px; text-align: center;">
-        <a href="{{ cancel_url }}" class="btn-primary" target="_blank" rel="noopener">Скасувати підписку</a>
+    <div style="margin: 35px 0; text-align: center;">
+        <a href="{{ cancel_url }}" class="btn-primary" target="_blank" rel="noopener">
+            Скасувати підписку
+        </a>
     </div>
 
-    <div class="seo-block" style="margin-top: 40px;">
+    <div class="seo-block">
         {{ seo_text }}
     </div>
 </div>
