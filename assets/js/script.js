@@ -56,11 +56,13 @@ function fillStaticTranslations() {
         if (el && val) el.innerText = val; 
     };
 
+    // Основні тексти
     safeSet('counterLabel', info.total_saved);
-    
-    // Нові поля футера
+    safeSet('mainDesc', info.desc);
+
+    // ФУТЕР (Тут ми додаємо слоган)
     safeSet('footerCreated', info.footer_created);
-    safeSet('footerSlogan', info.footer_slogan);
+    safeSet('footerSlogan', info.footer_slogan); // <--- Береться з вашого JSON
     
     if (info.ui) {
         safeSet('donateTitle', info.ui.donate_t);
@@ -76,8 +78,6 @@ function fillStaticTranslations() {
         if (si) si.placeholder = info.ui.search_placeholder;
     }
 
-    safeSet('mainDesc', info.desc);
-    
     const seoEl = document.getElementById('seoContent');
     if (seoEl && info.seo_text) seoEl.innerHTML = info.seo_text;
 }
