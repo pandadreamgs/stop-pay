@@ -42,8 +42,8 @@ def build():
         os.makedirs(lang_dir, exist_ok=True)
         
         # Головна сторінка мови
-        main_content = '<div id="siteContent"></div>' 
-        index_html = layout.replace('{{ content }}', main_content)
+        index_body = load_template('index_body.html') # Завантажуємо нашу нову начинку
+        index_html = layout.replace('{{ content }}', index_body)
         
         # Заміна шляхів (твоя логіка)
         index_html = index_html.replace('href="/assets', f'href="{BASE_PATH}/assets')
