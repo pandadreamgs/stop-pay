@@ -81,11 +81,27 @@ def build():
     except Exception as e:
         print(f"Помилка генерації HTML: {e}")
 
-    # 7. РЕДІРЕКТ У КОРЕНІ
+    # 7. РОЗУМНИЙ РЕДІРЕКТ У КОРЕНІ
     with open('dist/index.html', 'w', encoding='utf-8') as f:
-        f.write(f'<html><head><meta http-equiv="refresh" content="0; url={BASE_PATH}/ua/"></head></html>')
-
-    print(f"Build complete! Services: {len(all_services)}, Languages: {available_langs}")
+        f.write(f'''<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        (function() {{
+            var savedLang = localStorage.getItem('user_lang');
+            var root = "{BASE_PATH}";
+            if (savedLang && savedLang !== 'ua') {{
+                window.location.replace(root + '/' + savedLang + '/');
+            }} else {{
+                window.location.replace(root + '/ua/');
+            }}
+        }})();
+    </script>
+</head>
+<body>
+    <p>Redirecting...</p>
+</body>
+</html>''')
 
 if __name__ == "__main__":
     build()
