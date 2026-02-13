@@ -65,14 +65,30 @@ def build():
                     with open(content_path, 'r', encoding='utf-8') as f_in:
                         c = json.load(f_in)
                     
-                    steps_html = "".join([f"<li>{step}</li>" for step in c['steps']])
+                    # Копіюємо кроки, щоб не зіпсувати оригінальний список
+                    steps = list(c['steps'])
+                    
+                    # Робимо перший крок клікабельним (якщо там є назва сайту)
+                    if steps:
+                        clean_url = s["official_url"].replace("https://", "").replace("http://", "").rstrip('/')
+                        link_html = f'<a href="{s["official_url"]}" target="_blank" rel="noopener">{clean_url}</a>'
+                        # Замінюємо текст (наприклад, "megogo.net") на посилання
+                        steps[0] = steps[0].replace(clean_url, link_html)
+                    
+                    steps_html = "".join([f"<li>{step}</li>" for step in steps])
+                    
+                    # Наповнюємо шаблон page.html даними
                     pg = page_tpl.replace('{{ title }}', c['title']) \
                                  .replace('{{ description }}', c['description']) \
                                  .replace('{{ steps }}', steps_html) \
+                                 .replace('{{ official_url }}', s['official_url']) \
                                  .replace('{{ cancel_url }}', s['official_cancel_url']) \
                                  .replace('{{ seo_text }}', c.get('seo_text', ''))
                     
+                    # Вставляємо готову сторінку в загальний layout сайту
                     full_pg = layout.replace('{{ content }}', pg)
+                    
+                    # Зберігаємо результат
                     s_dir = os.path.join(lang_dir, s["id"])
                     os.makedirs(s_dir, exist_ok=True)
                     with open(os.path.join(s_dir, 'index.html'), 'w', encoding='utf-8') as f_out:
