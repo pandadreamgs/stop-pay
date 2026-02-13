@@ -16,6 +16,7 @@
     "cloud_storage": "Cloud Storage"
   },
   "ui": {
+    "btn_cancel" : "Unsubscribe",
     "search_placeholder": "Find a service...",
     "search_results": "Search Results",
     "search_not_found": "Nothing found 🤷‍♂️",
