@@ -73,21 +73,24 @@ def build():
                     price = str(s.get('price_usd', 0))
                     sid = s['id']
 
-                    # Робимо посилання в кроках клікабельним і додаємо лічильник
+                    # 1. Посилання в першому кроці (веде на ГОЛОВНУ)
                     steps = list(c['steps'])
                     if steps:
                         clean_url = s["official_url"].replace("https://", "").replace("http://", "").rstrip('/')
+                        # Клік на головну теж рахуємо як спробу відписки
                         link_html = f'<a href="{s["official_url"]}" target="_blank" rel="noopener" onclick="handlePriceAdd(\'{price}\', \'{sid}\')">{clean_url}</a>'
                         steps[0] = steps[0].replace(clean_url, link_html)
                     
                     steps_html = "".join([f"<li>{step}</li>" for step in steps])
 
-                    # Підготовка підказки з активним посиланням та лічильником
-                    hint_link = f'<a href="{s["official_cancel_url"]}" target="_blank" rel="noopener" onclick="handlePriceAdd(\'{price}\', \'{sid}\')">{s["official_cancel_url"]}</a>'
+                    # 2. Посилання в "Пораді" (веде на ГОЛОВНУ, як ти і просив)
+                    # Текст в JSON має містити {{ official_url }}
+                    hint_link = f'<a href="{s["official_url"]}" target="_blank" rel="noopener" onclick="handlePriceAdd(\'{price}\', \'{sid}\')">{s["official_url"]}</a>'
                     hint_text = lang_data.get('cancel_hint', '').replace('{{ official_url }}', hint_link)
                     
                     btn_text = lang_data.get('ui', {}).get('btn_cancel', 'Скасувати підписку')
 
+                    # 3. Підстановка в шаблон (cancel_url тут веде на сторінку скасування для кнопки)
                     pg = page_tpl.replace('{{ title }}', c['title']) \
                                  .replace('{{ price_usd }}', price) \
                                  .replace('{{ service_id }}', sid) \
@@ -132,4 +135,4 @@ def build():
 
 if __name__ == "__main__":
     build()
-                      
+    
