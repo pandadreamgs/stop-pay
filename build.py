@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import re
 
 # Назва твого репозиторію на GitHub
 BASE_PATH = "/stop_pay"
@@ -72,24 +73,29 @@ def build():
                     price = str(s.get('price_usd', 0))
                     sid = s['id']
 
-                    # 1. Посилання в кроках (на ГОЛОВНУ)
-                    steps = list(c['steps'])
+                    # 1. Обробка кроків (на ГОЛОВНУ)
+                    steps = list(c.get('steps', []))
                     if steps:
                         clean_url = s["official_url"].replace("https://", "").replace("http://", "").rstrip('/')
+                        # Створюємо посилання для першого кроку
                         link_html = f'<a href="{s["official_url"]}" target="_blank" rel="noopener" onclick="handlePriceAdd(\'{price}\', \'{sid}\')">{clean_url}</a>'
                         steps[0] = steps[0].replace(clean_url, link_html)
                     steps_html = "".join([f"<li>{step}</li>" for step in steps])
 
-                    # 2. Посилання в підказці (на ГОЛОВНУ)
-                    hint_link = f'<a href="{s["official_url"]}" target="_blank" rel="noopener" onclick="handlePriceAdd(\'{price}\', \'{sid}\')">{s["official_url"]}</a>'
-                    hint_text = lang_data.get('cancel_hint', '').replace('{{ official_url }}', hint_link)
+                    # 2. Обробка підказки (cancel_hint)
+                    # Оскільки в JSON вже є тег <a href="{{ official_url }}">, ми просто наповнюємо його
+                    hint_text = lang_data.get('cancel_hint', '')
+                    # Вставляємо URL
+                    hint_text = hint_text.replace('{{ official_url }}', s["official_url"])
+                    # Додаємо обробник кліку в існуючий тег (шукаємо місце перед закриттям тегу <a>)
+                    hint_text = hint_text.replace('target="_blank"', f'target="_blank" onclick="handlePriceAdd(\'{price}\', \'{sid}\')"')
                     
-                    # 3. Обробка SEO тексту (прибираємо теги шаблону вручну)
-                    seo_text = c.get('seo_text', '')
-                    seo_html = f'<div class="seo-text">{seo_text}</div>' if seo_text else ''
+                    # 3. Обробка SEO тексту
+                    seo_content = c.get('seo_text', '')
+                    seo_html = f'<div class="seo-text">{seo_content}</div>' if seo_content else ''
 
-                    # 4. Наповнюємо шаблон
-                    pg = page_tpl.replace('{{ title }}', c['title']) \
+                    # 4. Наповнення шаблону
+                    pg = page_tpl.replace('{{ title }}', c.get('title', '')) \
                                  .replace('{{ price_usd }}', price) \
                                  .replace('{{ service_id }}', sid) \
                                  .replace('{{ description }}', c.get('desc', c.get('description', ''))) \
@@ -98,16 +104,10 @@ def build():
                                  .replace('{{ btn_cancel_text }}', lang_data.get('ui', {}).get('btn_cancel', 'Cancel')) \
                                  .replace('{{ cancel_url }}', s['official_cancel_url'])
                     
-                    # Замінюємо весь блок SEO разом із тегами умови, якщо вони там були
-                    if '{% if seo_text %}' in pg:
-                        start_tag = '{% if seo_text %}'
-                        end_tag = '{% endif %}'
-                        parts = pg.split(start_tag)
-                        before_seo = parts[0]
-                        after_seo = parts[1].split(end_tag)[1]
-                        pg = before_seo + seo_html + after_seo
-                    else:
-                        pg = pg.replace('{{ seo_text }}', seo_html)
+                    # Вирізаємо конструкції {% if seo_text %}...{% endif %} та вставляємо контент
+                    pg = re.sub(r'\{% if seo_text %\}.*?\{% endif %}', seo_html, pg, flags=re.DOTALL)
+                    # На випадок якщо плейсхолдер без тегів умови
+                    pg = pg.replace('{{ seo_text }}', seo_html)
 
                     full_pg = layout.replace('{{ content }}', pg)
                     
@@ -125,4 +125,4 @@ def build():
 
 if __name__ == "__main__":
     build()
-                    
+            
