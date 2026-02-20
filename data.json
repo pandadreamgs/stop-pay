@@ -21,6 +21,15 @@
       "type": "ua",
       "official_url": "https://megogo.net/",
       "official_cancel_url": "https://megogo.net/"
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "category": "tv",
+      "price_usd": 7.99,
+      "type": "global",
+      "official_url": "netflix.com",
+      "official_cancel_url": "https://www.netflix.com/account"
     }
   ]
 }
