@@ -1,0 +1,73 @@
+name: Sync Translations on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  translate-and-cleanup:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Backend (Scripts)
+        uses: actions/checkout@v4
+        with:
+          repository: pandadreamgs/stop_pay_backend
+          token: ${{ secrets.GH_TOKEN }}
+          path: backend
+
+      - name: Checkout Frontend (Data)
+        uses: actions/checkout@v4
+        with:
+          path: frontend
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install google-genai requests
+
+      - name: Run Translator
+        env:
+          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          cd frontend
+          python ../backend/translator.py
+
+      - name: Commit and Push Translations
+        working-directory: frontend
+        run: |
+          git config --global user.name "PandaBot [AI Translator]"
+          git config --global user.email "bot@pandadream.gs"
+          git add content/**/*.json
+          git commit -m "AI: Auto-sync translations after PR #${{ github.event.pull_request.number }}" || exit 0
+          git push origin main
+
+      - name: Close Original Issue on Backend
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            // Витягуємо номер Issue з опису Pull Request
+            const prBody = context.payload.pull_request.body;
+            const issueMatch = prBody.match(/#(\d+)/);
+            if (issueMatch) {
+              const issueNumber = parseInt(issueMatch[1]);
+              await github.rest.issues.createComment({
+                owner: "pandadreamgs",
+                repo: "stop_pay_backend",
+                issue_number: issueNumber,
+                body: "✅ **Виправлення прийнято!** Всі переклади оновлено, зміни вже на сайті."
+              });
+              await github.rest.issues.update({
+                owner: "pandadreamgs",
+                repo: "stop_pay_backend",
+                issue_number: issueNumber,
+                state: "closed"
+              });
+            }
+            
