@@ -33,15 +33,6 @@
       "official_cancel_url": "https://support.apple.com/en-us/HT202039"
     },
     {
-      "id": "audible-us",
-      "name": "Audible (US)",
-      "category": "music",
-      "price_usd": 7.95,
-      "type": "us",
-      "official_url": "www.audible.com",
-      "official_cancel_url": "www.audible.com"
-    },
-    {
       "id": "audible",
       "name": "Audible",
       "category": "music",
