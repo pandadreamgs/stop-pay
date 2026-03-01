@@ -43,7 +43,7 @@
     },
     {
       "id": "autopay-auto-loan",
-      "name": "AUTOPAY Autopay",
+      "name": "Autopay",
       "category": "software",
       "price_usd": 0.0,
       "type": "global",
