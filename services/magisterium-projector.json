@@ -1,9 +1,10 @@
 {
-  "id": "magisterium-projector",
-  "name": "Magisterium AI Projector",
-  "category": "software",
-  "price_usd": 3.99,
-  "type": "global",
-  "official_url": null,
-  "official_cancel_url": null
+"magisterium-projector": {
+        "id": "magisterium-projector",
+        "name": "Magisterium AI",
+        "category": "ai",
+        "price_usd": 15.00,
+        "type": "global",
+        "official_url": "https://www.magisterium.com/",
+        "official_cancel_url": "https://www.magisterium.com/account"
 }
