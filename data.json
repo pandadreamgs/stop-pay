@@ -17,11 +17,11 @@
     {
       "id": "allegro-smart",
       "name": "Allegro (Allegro Smart!)",
-      "category": "software",
-      "price_usd": 4.94,
+      "category": "lifestyle",
+      "price_usd": 3.75,
       "type": "pl",
-      "official_url": "https://allegro.pl",
-      "official_cancel_url": "https://na.allegro.pl/smart-formularz-kontaktowy"
+      "official_url": "https://allegro.pl/smart",
+      "official_cancel_url": "https://allegro.pl/moje-allegro/zakupy/allegro-smart"
     },
     {
       "id": "apple",
