@@ -80,11 +80,11 @@
     {
       "id": "blue-apron",
       "name": "Blue Apron",
-      "category": "software",
-      "price_usd": 9.99,
-      "type": "global",
+      "category": "food",
+      "price_usd": 11.0,
+      "type": "us",
       "official_url": "https://www.blueapron.com",
-      "official_cancel_url": "https://www.blueapron.com"
+      "official_cancel_url": "https://www.blueapron.com/account#subscription"
     },
     {
       "id": "bolt-food-bolt-plus",
